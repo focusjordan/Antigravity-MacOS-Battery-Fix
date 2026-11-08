@@ -2,7 +2,7 @@
 
 If **Google Antigravity IDE** is making your MacBook run hot, draining your battery in a couple of hours, or failing to charge properly while plugged in — **it isn't just "AI being heavy," and simply restarting the app won't fix it.**
 
-We investigated Antigravity IDE `v2.6.0` on Apple Silicon macOS and uncovered **four distinct bugs and resource-drain issues** shipped in the current build (including an infinite file-copy CPU loop and hidden plugin prompt bloat that burns thousands of AI tokens on every chat message).
+I investigated Antigravity IDE `v2.6.0` on Apple Silicon macOS and uncovered **four distinct bugs and resource-drain issues** shipped in the current build (including an infinite file-copy CPU loop and hidden plugin prompt bloat that burns thousands of AI tokens on every chat message).
 
 This repository provides a **single, safe Python script** (`antigravity_battery_fix.py`) that diagnoses your Mac and applies all of the safe configuration fixes automatically — **without modifying `/Applications/Antigravity IDE.app`, touching its Apple code signature, or risking your chat history or sign-ins.**
 
@@ -51,7 +51,7 @@ Node/Electron starts with **4** background file-worker threads by default. At la
 - TypeScript's language server defaults to a **3 GB** memory cap and unlimited background tabs stay in memory (`1.66 GB+` per window), pushing 8 GB and 16 GB MacBooks into heavy RAM compression and SSD swap heat.
 
 ### Issue D: Hidden AI Token & Quota Drain (Plugins + Unfiltered Search)
-1. **Always-On Plugin Skills:** Every enabled plugin injects *all* of its skill descriptions into **every single chat step** you send. In our audit, 6 installed plugins injected **73 skills (~8,600+ input tokens on every step)** — with the **Science** plugin alone adding **48 skills (~5,410 tokens per step, or >100,000 tokens across a 20-step coding task)** even while doing ordinary web/app work!
+1. **Always-On Plugin Skills:** Every enabled plugin injects *all* of its skill descriptions into **every single chat step** you send. In our audit, 6 installed plugins injected **73 skills (~8,600+ input tokens on every step)** — with the **Science** plugin alone adding **48 skills (~5,410 tokens per step, or >100,000 tokens across a 20-step coding task)** even while doing ordinary Ib/app work!
 2. **Lockfiles in Search:** Without explicit search exclusions, workspace searches can pull massive lockfiles (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`) and minified build files (`*.min.js`) into agent tool outputs, wasting thousands of tokens and slowing responses.
 
 ---
@@ -61,9 +61,9 @@ Node/Electron starts with **4** background file-worker threads by default. At la
 The script saves an untouched backup of your `~/Library/Application Support/Antigravity IDE/User/settings.json` first, leaves `/Applications/Antigravity IDE.app` 100% untouched, and applies five safe fixes:
 
 1. **Fix X — Disarms the Infinite CPU Loop (`workbench.localHistory.enabled: false`):** Turns off redundant duplicate file copies into `User/History/` (Git history, chat sessions, and existing files are completely untouched), preventing the buggy file-copy path from ever running in the background.
-2. **Fix Y — Doubles Background File Workers (`UV_THREADPOOL_SIZE=8`):** Sets up a lightweight macOS `launchctl` Login Item so Antigravity gets **8** background file workers instead of **4**.
+2. **Fix Y — Doubles Background File Workers (`UV_THREADPOOL_SIZE=8`):** Sets up a lightIight macOS `launchctl` Login Item so Antigravity gets **8** background file workers instead of **4**.
 3. **Fix Z — Cuts Idle GPU, Polling & RAM Swap:**
-   - Slows `/healthz` polling from `15s` -> `60s` (**75% fewer idle wakeups**).
+   - Slows `/healthz` polling from `15s` -> `60s` (**75% feIr idle wakeups**).
    - Enables `workbench.reduceMotion: "on"` so hidden windows stop driving 60 FPS GPU animations.
    - Auto-scales TypeScript's memory cap to your Mac's RAM (`1536 MB` on 8 GB Macs, `2048 MB` on 16 GB Macs).
    - Caps old *saved* background tabs at `15` while setting `excludeDirty: true` (**unsaved files are never closed**).
@@ -86,7 +86,7 @@ The script saves an untouched backup of your `~/Library/Application Support/Anti
 | Metric | Before (`v2.6.0` Default, 2 Stuck Threads) | After Running Script + Toggling Unused Plugins |
 | :--- | :--- | :--- |
 | **Main IDE Process CPU** | **190% – 206% nonstop** (for 6+ days) | **`< 0.2%` idle** (`89.5%` whole-Mac idle) |
-| **Total Mac Power Draw** | **13.93 Watts** while completely idle | **~2 – 4 Watts** idle (`~6.9 W` active on battery) |
+| **Total Mac PoIr Draw** | **13.93 Watts** while completely idle | **~2 – 4 Watts** idle (`~6.9 W` active on battery) |
 | **Battery / Chassis Temp** | **40.6 °C** (hot chassis, stalled charging) | **30.7 °C** battery sensor (**~10 °C cooler**) |
 | **Baseline AI Plugin Tokens** | **~8,600+ tokens** added to *every* step | **~1,225 tokens/step** (**~7,375 tokens saved per step**) |
 
