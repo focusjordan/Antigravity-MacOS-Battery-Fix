@@ -13,8 +13,8 @@ This repository provides a **single, safe Python script** (`antigravity_battery_
 Open **Terminal** on your Mac and run:
 
 ```bash
-git clone https://github.com/<your-username>/antigravity-mac-battery-fix.git
-cd antigravity-mac-battery-fix
+git clone https://github.com/focusjordan/Antigravity-MacOS-Battery-Fix.git
+cd Antigravity-MacOS-Battery-Fix
 
 # 1. Optional: Run a read-only check first to see if your Mac currently has stuck CPU threads or token-heavy plugins
 python3 antigravity_battery_fix.py --diagnose

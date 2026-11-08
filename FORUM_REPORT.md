@@ -6,7 +6,7 @@ After experiencing severe heat, rapid battery drain, and stalled USB-C charging 
 
 We found **four separate issues shipped in `v2.6.0`** (led by an infinite 100%-per-core CPU file-copy bug that **simply restarting the app does NOT permanently fix**), built a **safe, zero-tamper Python diagnostic & fix script** anyone can pull down and run in 10 seconds, and documented exact upstream fixes for the Google engineering team below.
 
-- **GitHub Repo (Diagnostic & Automatic Fix Script):** `https://github.com/<your-username>/antigravity-mac-battery-fix`
+- **GitHub Repo (Diagnostic & Automatic Fix Script):** https://github.com/focusjordan/Antigravity-MacOS-Battery-Fix
 
 ---
 
@@ -40,8 +40,8 @@ We packaged all of the safe user-level fixes into `antigravity_battery_fix.py`. 
 - **Fix W:** Adds lockfile & build-folder shields to `search.exclude` and `files.watcherExclude`, **plus prints a token-cost report of your installed plugins** so you can toggle off unused heavy packs live in **Customizations -> Plugins** (no restart required).
 
 ```bash
-git clone https://github.com/<your-username>/antigravity-mac-battery-fix.git
-cd antigravity-mac-battery-fix
+git clone https://github.com/focusjordan/Antigravity-MacOS-Battery-Fix.git
+cd Antigravity-MacOS-Battery-Fix
 
 python3 antigravity_battery_fix.py --diagnose   # Check live CPU, stuck handles, wattage & plugin tokens
 python3 antigravity_battery_fix.py --apply      # Back up settings & apply all fixes

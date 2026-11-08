@@ -11,6 +11,10 @@ license = { file = "LICENSE" }
 requires-python = ">=3.8"
 py-modules = ["antigravity_battery_fix"]
 
+[project.urls]
+Homepage = "https://github.com/focusjordan/Antigravity-MacOS-Battery-Fix"
+Repository = "https://github.com/focusjordan/Antigravity-MacOS-Battery-Fix"
+
 [project.scripts]
 antigravity-battery-fix = "antigravity_battery_fix:main"
 
