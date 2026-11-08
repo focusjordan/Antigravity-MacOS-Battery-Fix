@@ -2,9 +2,9 @@
 
 Hi Antigravity team & fellow Mac users,
 
-After experiencing severe heat, rapid battery drain, and stalled USB-C charging on an Apple Silicon MacBook Air running **Antigravity IDE `v2.6.0`** (Electron `39.2.3` / VS Code `1.107.0`), we profiled the app down to the thread, battery-telemetry, and bundle level.
+After experiencing severe heat, rapid battery drain, and stalled USB-C charging on my Apple Silicon MacBook Air running **Antigravity IDE `v2.6.0`** (Electron `39.2.3` / VS Code `1.107.0`), I profiled the app down to the thread, battery-telemetry, and bundle level.
 
-We found **four separate issues shipped in `v2.6.0`** (led by an infinite 100%-per-core CPU file-copy bug that **simply restarting the app does NOT permanently fix**), built a **safe, zero-tamper Python diagnostic & fix script** anyone can pull down and run in 10 seconds, and documented exact upstream fixes for the Google engineering team below.
+I found **four separate issues shipped in `v2.6.0`** (led by an infinite 100%-per-core CPU file-copy bug that **simply restarting the app does NOT permanently fix**), built a **safe, zero-tamper Python diagnostic & fix script** anyone can pull down and run in 10 seconds, and documented exact upstream fixes for the Google engineering team below.
 
 - **GitHub Repo (Diagnostic & Automatic Fix Script):** https://github.com/focusjordan/Antigravity-MacOS-Battery-Fix
 
@@ -25,14 +25,14 @@ We found **four separate issues shipped in `v2.6.0`** (led by an infinite 100%-p
 - Every open window pings `/healthz` every **15 seconds** (`antigravity.heartbeatIntervalMs: 15000`), spawns its own separate `200–900 MB` `agy --hub` process, leaves TypeScript Server capped at **3 GB**, and keeps unlimited background tabs open (`1.66 GB+` per renderer) — causing heavy RAM compression and SSD swap heat on 8–16 GB MacBooks.
 
 ### Issue D: Hidden AI Token & Quota Drain (Always-On Plugin Skills + Lockfile Searches)
-- Every enabled plugin injects *all* of its skill descriptions into **every single chat step**. Having 6 common plugins enabled injected **73 skills (~8,600+ baseline input tokens on every step)** — with the **Science** plugin alone costing **~5,410 tokens per step** (over **100,000 tokens** across a 20-step coding task) even when doing ordinary web/app development!
+- Every enabled plugin injects *all* of its skill descriptions into **every single chat step**. On my setup, having 6 common plugins enabled injected **73 skills (~8,600+ baseline input tokens on every step)** — with the **Science** plugin alone costing **~5,410 tokens per step** (over **100,000 tokens** across a 20-step coding task) even when doing ordinary web/app development!
 - Additionally, unless `search.exclude` blocks lockfiles (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`) and minified bundles (`*.min.js`), workspace searches can pull huge generated files into agent context.
 
 ---
 
 ## 2. Pull-Down Fix Script for Affected Mac Users (100% Safe / Zero App Modification)
 
-We packaged all of the safe user-level fixes into `antigravity_battery_fix.py`. It **never modifies `/Applications/Antigravity IDE.app` or its Google code signature** (preserving logins, Keychain, chat history, and auto-updates), saves a `.bak` backup of your `settings.json` first, and applies:
+I packaged all of the safe user-level fixes into `antigravity_battery_fix.py`. It **never modifies `/Applications/Antigravity IDE.app` or its Google code signature** (preserving logins, Keychain, chat history, and auto-updates), saves a `.bak` backup of your `settings.json` first, and applies:
 
 - **Fix X:** Sets `"workbench.localHistory.enabled": false` (completely disarms the `libuv` infinite CPU loop while keeping Git & chat history untouched).
 - **Fix Y:** Sets `UV_THREADPOOL_SIZE=8` via macOS `launchctl` so the background file-worker pool isn't bottlenecked.
@@ -56,7 +56,7 @@ Run `python3 antigravity_battery_fix.py --diagnose` (or check macOS **Activity M
 1. Verify `Main IDE Process` (`Electron`) drops from `100%–300%` CPU to `< 1%` idle, with `0` stuck `User/History` file handles.
 2. Open Antigravity's **Customizations -> Plugins** UI and toggle off any heavy skill packs you aren't actively using (plus use `/compact` on long threads).
 
-**Measured on a fanless Apple M1 MacBook Air (8 GB RAM):**
+**Measured on my fanless Apple M1 MacBook Air (8 GB RAM):**
 - **Main `Electron` CPU:** `206.2%` continuous -> **`< 0.2%` idle** (`89.5%` system idle)
 - **System Power Load (`AppleSmartBattery`):** `13.93 W` idle -> **`~2–4 W` idle**
 - **Battery Sensor Temperature:** `40.6 °C` -> **`30.7 °C`**
